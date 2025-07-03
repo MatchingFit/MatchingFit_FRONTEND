@@ -1,0 +1,30 @@
+# Build stage
+FROM node:18-alpine as build
+
+WORKDIR /app
+
+# pnpm 설치
+RUN npm install -g pnpm
+
+# 패키지 파일 복사 및 의존성 설치
+COPY package*.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# 소스 코드 복사 및 빌드
+COPY . .
+RUN pnpm run build
+
+# Production stage
+FROM nginx:alpine
+
+# nginx 설정 복사 (프론트엔드 전용 설정)
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# 빌드된 파일을 nginx로 복사 (Vite는 dist 폴더 사용)
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# 포트 노출
+EXPOSE 80
+
+# nginx 실행
+CMD ["nginx", "-g", "daemon off;"]
