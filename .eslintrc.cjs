@@ -30,4 +30,4 @@ module.exports = {
     // 여기에 필요 시 추가 규칙 설정
     'react/react-in-jsx-scope': 'off', // React 17+ JSX 자동 설정
   },
-}
+};
