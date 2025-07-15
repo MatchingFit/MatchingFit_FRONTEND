@@ -1,0 +1,70 @@
+.loginContainer {
+  padding: 0 16px;
+  width: 100%;
+  max-width: 512px;
+  margin: 0 auto;
+}
+
+.loginTitle {
+  font-size: var(--font-size-28);
+  font-weight: 700;
+  text-align: center;
+  margin-block: 100px 40px;
+}
+
+.kakaoBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  border-radius: 5px;
+  background-color: #fee500;
+  font-size: var(--font-size-18);
+  font-weight: 700;
+  color: var(--color-black);
+  cursor: pointer;
+
+  &:disabled {
+    background-color: var(--color-gray-b1);
+    cursor: not-allowed;
+  }
+}
+
+.or {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 24px 0;
+  color: var(--color-secondary);
+  font-size: var(--font-size-14);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: var(--color-gray-d5);
+  }
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.signupBtn {
+  display: block;
+  margin-top: 44px;
+  text-align: center;
+  font-size: var(--font-size-16);
+  color: var(--color-secondary);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
