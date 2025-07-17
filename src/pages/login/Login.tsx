@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '@/lib/axiosInstance';
 import useModal from '@/hooks/useModal';
+import useAuthStore from '@/store/auth';
+import useUserStore from '@/store/user';
 import AuthInput from '../../components/authInput/AuthInput';
 import Button from '../../components/button/Button';
 import Icon from '../../components/icon/Icon';
@@ -16,33 +18,33 @@ const Login = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const kakaoAuthRequestUrl = `${import.meta.env.VITE_API_BASE_URL}/oauth2/authorization/kakao`;
-  const socialLoginRedirectUri = `${import.meta.env.VITE_FRONTEND_BASE_URL}/anaytics/start`;
+  const socialLoginRedirectUri = `${import.meta.env.VITE_FRONTEND_BASE_URL}/analytics/start`;
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const response = await axiosInstance.post(
-        '/api/v1/users/login',
-        {
-          email,
-          password,
-        },
-        { withCredentials: true },
-      );
+      const response = await axiosInstance.post('/api/v1/users/login', {
+        email,
+        password,
+      });
 
-      const { message, success } = response.data;
+      const { success, message, data } = response.data;
 
-      if (success) {
-        navigate('/anaytics/start');
-      } else {
+      if (!success) {
         throw new Error(message || '로그인 실패');
       }
+
+      useAuthStore.getState().setAccessToken(data);
+
+      const meRes = await axiosInstance.get('/api/v1/users/me');
+      const user = meRes.data.data;
+      useUserStore.getState().setUser({ id: user.id, name: user.name });
+
+      navigate('/analytics/start');
     } catch (error) {
-      if (error instanceof Error) {
-        openModal();
-        console.log(error);
-      }
+      openModal();
+      console.log(error);
     }
   };
 
