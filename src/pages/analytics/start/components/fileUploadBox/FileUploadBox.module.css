@@ -1,0 +1,35 @@
+.hiddenInput {
+  display: none;
+}
+
+.fileUploadBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  padding: 0 40px 0 12px;
+  border: 1px solid var(--color-gray-b1);
+  border-radius: 5px;
+  font-size: var(--font-size-16);
+  color: var(--color-secondary);
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.fileNameContainer {
+  display: flex;
+  overflow: hidden;
+  color: var(--color-gray-2);
+}
+
+.fileName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
