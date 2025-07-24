@@ -9,7 +9,7 @@ import useAuthStore from '@/store/auth';
 const NAV_LINKS = [
   { label: '이력서 분석', to: '/analytics/start' },
   { label: '업무 성향 테스트', to: '' },
-  { label: 'HR 담당자 성향 테스트', to: '' },
+  { label: 'HR 담당자 성향 테스트', to: '/hr-test/start' },
 ] as const;
 
 const Header: React.FC = () => {
