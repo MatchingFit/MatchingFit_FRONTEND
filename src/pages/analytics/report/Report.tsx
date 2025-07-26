@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -29,6 +30,8 @@ const downloadPDF = async () => {
 };
 
 const Report = () => {
+  const [animate, setAnimate] = useState(true);
+
   const location = useLocation();
   const { job_field, score_result } = location.state || {};
 
@@ -43,6 +46,12 @@ const Report = () => {
     { subject: '성장 가능성', score: 65, average },
   ];
 
+  // 컴포넌트 마운트 후 애니메이션은 한 번만 실행
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimate(false), 2000); // 2초 후 애니메이션 끔
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <main className={styles.reportContainer}>
       <div id="pdf-section" className={styles.report}>
@@ -55,8 +64,8 @@ const Report = () => {
           <h3>역량</h3>
           <p>{score_result}</p>
           <div className={styles.chart}>
-            <ResponsiveContainer width="100%" height={400}>
-              <RadarChart cx="50%" cy="55%" outerRadius="60%" data={data}>
+            <ResponsiveContainer width="100%" aspect={1}>
+              <RadarChart cx="50%" cy="50%" outerRadius="60%" data={data}>
                 <PolarGrid stroke="#d8d8d8" />
                 <PolarAngleAxis
                   dataKey="subject"
@@ -77,6 +86,7 @@ const Report = () => {
                     r: 2,
                   }}
                   activeDot={false}
+                  isAnimationActive={animate}
                 />
                 <Radar
                   name="값"
@@ -91,6 +101,7 @@ const Report = () => {
                     strokeWidth: 1,
                   }}
                   activeDot={false}
+                  isAnimationActive={animate}
                 />
                 <Legend wrapperStyle={{ fontSize: 14 }} />
               </RadarChart>
