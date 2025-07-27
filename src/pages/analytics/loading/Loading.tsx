@@ -1,20 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axiosFormInstance from '@/lib/axiosFormInstance';
+import useUserStore from '@/store/user';
 import useModal from '@/hooks/useModal';
 import MyModal from '@/components/modal/Modal';
 import styles from './Loading.module.css';
 
 const Loading = () => {
+  const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
 
+  const user = useUserStore((state) => state.user);
+  const userId = user?.id;
+  const userName = user?.name;
+
+  const { isModalOpen, openModal, closeModal } = useModal();
+
   const location = useLocation();
-  const { file, selectedJob, userId, userName } = location.state || {};
+  const { file, selectedJob } = location.state || {};
 
   const hasRunRef = useRef(false);
-
-  const navigate = useNavigate();
-  const { isModalOpen, openModal, closeModal } = useModal();
 
   useEffect(() => {
     if (!file || !selectedJob || !userId || hasRunRef.current) return;

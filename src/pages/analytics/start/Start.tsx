@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useModal from '@/hooks/useModal';
 import useAuthStore from '@/store/auth';
-import useUserStore from '@/store/user';
 import JobSelectBox from './components/jobSelectBox/JobSelectBox';
 import FileUploadBox from './components/fileUploadBox/FileUploadBox';
 import Button from '@/components/button/Button';
@@ -22,7 +21,6 @@ const Start = () => {
 
   const accessToken = useAuthStore((state) => state.accessToken);
   const isLoggedIn = !!accessToken;
-  const user = useUserStore((state) => state.user);
 
   const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -57,8 +55,6 @@ const Start = () => {
       state: {
         file,
         selectedJob,
-        userId: user?.id,
-        userName: user?.name,
       },
     });
   };
