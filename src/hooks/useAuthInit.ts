@@ -34,7 +34,7 @@ const useAuthInit = () => {
         // 유저 정보 요청
         const meRes = await axiosInstance.get('/api/v1/users/me');
         const user = meRes.data.data;
-        setUser({ id: user.id, name: user.name });
+        setUser({ id: user.id, name: user.name, role: user.role });
         console.log('로그인 유지 성공, 유저 정보:', user);
       } catch (err) {
         console.warn('로그인 유지 실패, 로그아웃 처리됨', err);

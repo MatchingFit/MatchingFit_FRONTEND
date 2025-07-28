@@ -54,6 +54,7 @@ axiosInstance.interceptors.response.use(
         useUserStore.getState().setUser({
           id: user.id,
           name: user.name,
+          role: user.role,
         });
 
         return axiosInstance(originalRequest);

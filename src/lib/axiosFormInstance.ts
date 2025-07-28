@@ -49,6 +49,7 @@ axiosFormInstance.interceptors.response.use(
         useUserStore.getState().setUser({
           id: user.id,
           name: user.name,
+          role: user.role,
         });
 
         return axiosFormInstance(originalRequest);

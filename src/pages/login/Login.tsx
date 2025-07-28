@@ -39,7 +39,9 @@ const Login = () => {
 
       const meRes = await axiosInstance.get('/api/v1/users/me');
       const user = meRes.data.data;
-      useUserStore.getState().setUser({ id: user.id, name: user.name });
+      useUserStore
+        .getState()
+        .setUser({ id: user.id, name: user.name, role: user.role });
 
       navigate('/analytics/start');
     } catch (error) {
