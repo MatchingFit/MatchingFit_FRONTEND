@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useModal from '@/hooks/useModal';
 import useAuthStore from '@/store/auth';
-import useUserStore from '@/store/user';
 import JobSelectBox from './components/jobSelectBox/JobSelectBox';
 import FileUploadBox from './components/fileUploadBox/FileUploadBox';
 import Button from '@/components/button/Button';
@@ -22,7 +21,6 @@ const Start = () => {
 
   const accessToken = useAuthStore((state) => state.accessToken);
   const isLoggedIn = !!accessToken;
-  const user = useUserStore((state) => state.user);
 
   const navigate = useNavigate();
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -57,46 +55,46 @@ const Start = () => {
       state: {
         file,
         selectedJob,
-        userId: user?.id,
-        userName: user?.name,
       },
     });
   };
 
   return (
-    <main className={styles.startContainer}>
-      <form onSubmit={handleSubmit}>
-        <fieldset className={styles.jobSelectContainer}>
-          <legend className={styles.startTitle}>
-            분석을 원하는 직무를 선택하세요.
-          </legend>
-          <p className={styles.attentionNote}>
-            * 직무명은 실제 기업의 부서명과는 다를 수 있습니다.
-          </p>
-          <JobSelectBox onJobChange={setSelectedJob} />
-        </fieldset>
-        <fieldset className={styles.fileUploadContainer}>
-          <legend className={styles.startTitle}>
-            주의사항에 유의하여 이력서를 첨부하세요.
-          </legend>
-          <ul className={styles.attentionNoteList}>
-            <li>
-              <p className={styles.attentionNote}>
-                ⓘ 이력서 파일은 PDF, DOCX 형식으로 업로드해 주세요.
-              </p>
-            </li>
-            <li>
-              <p className={styles.attentionNote}>
-                ⓘ 오류가 있을 때는 파일 용량이 50MB가 넘었는지 확인해주세요.
-              </p>
-            </li>
-          </ul>
-          <FileUploadBox onFileChange={setFile} />
-        </fieldset>
-        <Button type="submit" variant="primary" size="lg">
-          분석하기
-        </Button>
-      </form>
+    <>
+      <main className={styles.startContainer}>
+        <form onSubmit={handleSubmit}>
+          <fieldset className={styles.jobSelectContainer}>
+            <legend className={styles.startTitle}>
+              분석을 원하는 직무를 선택하세요.
+            </legend>
+            <p className={styles.attentionNote}>
+              * 직무명은 실제 기업의 부서명과는 다를 수 있습니다.
+            </p>
+            <JobSelectBox onJobChange={setSelectedJob} />
+          </fieldset>
+          <fieldset className={styles.fileUploadContainer}>
+            <legend className={styles.startTitle}>
+              주의사항에 유의하여 이력서를 첨부하세요.
+            </legend>
+            <ul className={styles.attentionNoteList}>
+              <li>
+                <p className={styles.attentionNote}>
+                  ⓘ 이력서 파일은 PDF, DOCX 형식으로 업로드해 주세요.
+                </p>
+              </li>
+              <li>
+                <p className={styles.attentionNote}>
+                  ⓘ 오류가 있을 때는 파일 용량이 50MB가 넘었는지 확인해주세요.
+                </p>
+              </li>
+            </ul>
+            <FileUploadBox onFileChange={setFile} />
+          </fieldset>
+          <Button type="submit" variant="primary" size="lg">
+            분석하기
+          </Button>
+        </form>
+      </main>
 
       <MyModal
         isOpen={isModalOpen}
@@ -105,7 +103,7 @@ const Start = () => {
       >
         {modalMessage}
       </MyModal>
-    </main>
+    </>
   );
 };
 
