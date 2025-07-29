@@ -42,8 +42,9 @@ const Loading = () => {
 
         navigate('/analytics/report', {
           state: {
-            job_field: result.job_field,
-            score_result: result.score_result,
+            jobField: result.job_field,
+            scoreResult: result.score_result.competencyScores,
+            AIAnalysis: result.ai_analysis.finalSummary,
           },
         });
       } catch (err) {
@@ -62,7 +63,7 @@ const Loading = () => {
           clearInterval(interval);
           return 100;
         }
-        return prev + 1.5;
+        return prev + 0.3;
       });
     }, 30);
 
