@@ -44,7 +44,7 @@ const Loading = () => {
           state: {
             jobField: result.job_field,
             scoreResult: result.score_result.competencyScores,
-            AIAnalysis: result.ai_analysis.finalSummary,
+            AIAnalysis: result.ai_analysis,
           },
         });
       } catch (err) {
