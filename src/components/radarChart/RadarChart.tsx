@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import {
   Radar,
   RadarChart,
@@ -26,13 +26,13 @@ const CustomRadarChart = ({
   averageLabel,
   scoreLabel,
 }: CustomRadarChartProps) => {
-  const [animate, setAnimate] = useState(true);
+  // const [animate, setAnimate] = useState(true);
 
-  // 컴포넌트 마운트 후 애니메이션은 한 번만 실행
-  useEffect(() => {
-    const timer = setTimeout(() => setAnimate(false), 2000); // 2초 후 애니메이션 끔
-    return () => clearTimeout(timer);
-  }, []);
+  // // 컴포넌트 마운트 후 애니메이션은 한 번만 실행
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setAnimate(false), 2000); // 2초 후 애니메이션 끔
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
     <ResponsiveContainer width="100%" aspect={1}>
@@ -57,7 +57,8 @@ const CustomRadarChart = ({
             r: 2,
           }}
           activeDot={false}
-          isAnimationActive={animate}
+          isAnimationActive={false}
+          // isAnimationActive={animate}
         />
         <Radar
           name={scoreLabel}
@@ -72,7 +73,9 @@ const CustomRadarChart = ({
             strokeWidth: 1,
           }}
           activeDot={false}
-          isAnimationActive={animate}
+          isAnimationActive={false}
+
+          // isAnimationActive={animate}
         />
         <Legend wrapperStyle={{ fontSize: 14 }} />
       </RadarChart>

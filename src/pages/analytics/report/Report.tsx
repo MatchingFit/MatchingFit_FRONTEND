@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+import axiosFormInstance from '@/lib/axiosFormInstance';
 import useUserStore from '@/store/user';
-import downloadPDF from '@/utils/downloadPDF';
+import { generatePDFBlob, downloadPDF } from '@/utils/generatePDF';
 import CustomRadarChart from '@/components/radarChart/RadarChart';
 import Button from '@/components/button/Button';
 import styles from './Report.module.css';
@@ -51,10 +52,41 @@ const formatBulletList = (text: string): string => {
 
 const Report = () => {
   const location = useLocation();
-  const { jobField, scoreResult = [], AIAnalysis = '' } = location.state || {};
+  const {
+    resumeId,
+    jobField,
+    scoreResult = [],
+    AIAnalysis = '',
+  } = location.state || {};
 
   const user = useUserStore((state) => state.user);
   const userName = user?.name;
+
+  useEffect(() => {
+    if (!resumeId || !user) return;
+
+    const timer = setTimeout(() => {
+      const uploadPDFtoServer = async () => {
+        const blob = await generatePDFBlob();
+
+        if (!blob) return;
+
+        try {
+          const formData = new FormData();
+          formData.append('file', blob, 'report.pdf');
+          formData.append('resume_id', resumeId);
+
+          await axiosFormInstance.post('/upload/pdf', formData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      uploadPDFtoServer();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [resumeId, user]);
 
   // ✅ 평균 점수, radar 차트용 데이터 메모이제이션
   const averageScore = useMemo(() => {
