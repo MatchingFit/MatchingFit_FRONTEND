@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import useUserStore from '@/store/user';
+import Icon from '@/components/icon/Icon';
 import styles from './Result.module.css';
 
 const competencyDescriptions: { [key: string]: string } = {
@@ -38,6 +39,16 @@ const subjects: string[] = [
   '성장 가능성',
 ];
 
+type MatchedResume = {
+  jobField: string;
+  fileUrl: string;
+};
+
+type HRTestResultLocationState = {
+  scoreResult: Record<string, number>;
+  matchedResumes: MatchedResume[];
+};
+
 const HRTestResult = () => {
   const [animate, setAnimate] = useState(true);
 
@@ -50,8 +61,8 @@ const HRTestResult = () => {
   const user = useUserStore((state) => state.user);
   const userName = user?.name;
 
-  const location = useLocation();
-  const { scoreResult } = location.state || {};
+  const location = useLocation() as { state: HRTestResultLocationState };
+  const { scoreResult, matchedResumes } = location.state || {};
 
   const orderedScoreResult: Record<string, number> = {};
   subjects.forEach((key) => {
@@ -147,7 +158,7 @@ const HRTestResult = () => {
                 {index + 1}. {key}{' '}
               </span>
               <span className={styles.top3Description}>
-                <span>▶️</span>
+                <span className={styles.arrow}>▶️</span>
                 {competencyDescriptions[key]}
               </span>
             </li>
@@ -160,9 +171,26 @@ const HRTestResult = () => {
           {userName} 님의 성향 분석을 바탕으로 선별된 구직자의 이력서입니다.
           선호하는 인재상에 부합하는 구직자를 확인해보세요.
         </p>
-        <ul>
-          <li></li>
-          <li></li>
+        <ul className={styles.resumeList}>
+          {matchedResumes.map((resume, idx) => (
+            <li key={idx}>
+              {idx + 1}.
+              <span>
+                <span className={styles.jobFieldText}>직무:</span>{' '}
+                {resume.jobField}
+              </span>
+              <a
+                href={resume.fileUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.downloadLink}
+              >
+                이력서 <span className={styles.downloadText}>다운로드</span>
+                <Icon id="download" width={16} color="#5f812e" />
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
     </main>

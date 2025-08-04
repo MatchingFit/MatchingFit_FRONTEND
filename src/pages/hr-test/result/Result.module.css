@@ -65,6 +65,36 @@
   font-size: var(--font-size-14);
 }
 
+.resumeList {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.jobFieldText {
+  color: var(--color-secondary);
+}
+
+.downloadLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border: 1px solid var(--color-gray-ef);
+  border-radius: 5px;
+  font-size: var(--font-size-14);
+
+  &:hover {
+    background-color: var(--color-tertiary);
+  }
+}
+
 @media (max-width: 768px) {
   .report {
     padding: 0 32px;
@@ -89,6 +119,15 @@
       font-size: var(--font-size-18);
     }
   }
+
+  .arrow {
+    font-size: var(--font-size-12);
+    margin-right: 4px;
+  }
+
+  .downloadLink {
+    font-size: var(--font-size-12);
+  }
 }
 
 @media (max-width: 320px) {
@@ -96,5 +135,9 @@
     h2 {
       font-size: var(--font-size-16);
     }
+  }
+
+  .downloadText {
+    display: none;
   }
 }

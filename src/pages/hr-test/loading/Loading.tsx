@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-// import axiosInstance from '@/lib/axiosInstance';
+import axiosInstance from '@/lib/axiosInstance';
 import useModal from '@/hooks/useModal';
 import MyModal from '@/components/modal/Modal';
 import styles from './Loading.module.css';
@@ -23,13 +23,13 @@ const HRTestLoading = () => {
 
     const processHRTest = async () => {
       try {
-        // const response = await axiosInstance.post('/api/v1/managers/match', {
-        //   scores: scoreResult,
-        // });
-        // const result = response.data;
+        const response = await axiosInstance.post('/api/v1/managers/match', {
+          scores: scoreResult,
+        });
+        const result = response.data;
 
         navigate('/hr-test/result', {
-          state: { scoreResult },
+          state: { scoreResult, matchedResumes: result.matchedResumes },
         });
       } catch (err) {
         console.error(err);
