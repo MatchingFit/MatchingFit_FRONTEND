@@ -65,27 +65,26 @@ const Report = () => {
   useEffect(() => {
     if (!resumeId || !user) return;
 
-    const timer = setTimeout(() => {
-      const uploadPDFtoServer = async () => {
-        const blob = await generatePDFBlob();
-
-        if (!blob) return;
-
-        try {
-          const formData = new FormData();
-          formData.append('file', blob, 'report.pdf');
-          formData.append('resume_id', resumeId);
-
-          await axiosFormInstance.post('/upload/pdf', formData);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-
+    const timer = requestAnimationFrame(() => {
       uploadPDFtoServer();
-    }, 100);
+    });
 
-    return () => clearTimeout(timer);
+    return () => cancelAnimationFrame(timer);
+
+    async function uploadPDFtoServer() {
+      const blob = await generatePDFBlob();
+      if (!blob) return;
+
+      try {
+        const formData = new FormData();
+        formData.append('file', blob, 'report.pdf');
+        formData.append('resume_id', resumeId);
+
+        await axiosFormInstance.post('/upload/pdf', formData);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }, [resumeId, user]);
 
   // ✅ 평균 점수, radar 차트용 데이터 메모이제이션
