@@ -12,9 +12,9 @@ type ScoreResultItem = {
   totalScore: number;
 };
 
-type ParsedSections = Record<string, string>;
+type AIAnalysisItem = string;
 
-const resultTitles = [
+const RESULT_TITLES = [
   '1. 핵심 강점',
   '2. 보완할 점 또는 약점',
   '3. 기술 스택 요약',
@@ -31,32 +31,13 @@ const subjects = [
   '성장 가능성',
 ];
 
-// ✅ 텍스트 파싱 유틸
-const parseSectionsByTitle = (
-  text: string,
-  titles: string[],
-): ParsedSections => {
-  const result: ParsedSections = {};
-  titles.forEach((title, index) => {
-    const start = text.indexOf(title);
-    const end =
-      index + 1 < titles.length ? text.indexOf(titles[index + 1]) : text.length;
-    result[title] = text.slice(start + title.length, end).trim();
-  });
-  return result;
-};
-
-const formatBulletList = (text: string): string => {
-  return text.replace(/^\s+-/gm, '-');
-};
-
 const Report = () => {
   const location = useLocation();
   const {
     resumeId,
     jobField,
     scoreResult = [],
-    AIAnalysis = '',
+    AIAnalysis = [],
   } = location.state || {};
 
   const user = useUserStore((state) => state.user);
@@ -113,11 +94,6 @@ const Report = () => {
     return [...data].sort((a, b) => b.score - a.score).slice(0, 3);
   }, [data]);
 
-  const parsedResultSections = useMemo(
-    () => parseSectionsByTitle(AIAnalysis, resultTitles),
-    [AIAnalysis],
-  );
-
   return (
     <main className={styles.reportContainer}>
       <div id="pdf-section" className={styles.report}>
@@ -156,10 +132,10 @@ const Report = () => {
         <section className={styles.result}>
           <h3>03 분석 결과</h3>
           <div className={styles.resultSection}>
-            {Object.entries(parsedResultSections).map(([title, content]) => (
-              <div key={title}>
-                <h4>{title}</h4>
-                <p className={styles.resultText}>{formatBulletList(content)}</p>
+            {AIAnalysis.map((content: AIAnalysisItem, idx: number) => (
+              <div key={idx}>
+                <h4>{RESULT_TITLES[idx]}</h4>
+                <p className={styles.resultText}>{content}</p>
               </div>
             ))}
           </div>
