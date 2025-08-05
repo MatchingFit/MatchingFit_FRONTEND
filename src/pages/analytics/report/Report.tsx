@@ -1,16 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
+import axiosFormInstance from '@/lib/axiosFormInstance';
 import useUserStore from '@/store/user';
-import downloadPDF from '@/utils/downloadPDF';
+import { generatePDFBlob, downloadPDF } from '@/utils/generatePDF';
+import CustomRadarChart from '@/components/radarChart/RadarChart';
 import Button from '@/components/button/Button';
 import styles from './Report.module.css';
 
@@ -19,9 +12,9 @@ type ScoreResultItem = {
   totalScore: number;
 };
 
-type ParsedSections = Record<string, string>;
+type AIAnalysisItem = string;
 
-const resultTitles = [
+const RESULT_TITLES = [
   '1. 핵심 강점',
   '2. 보완할 점 또는 약점',
   '3. 기술 스택 요약',
@@ -38,33 +31,42 @@ const subjects = [
   '성장 가능성',
 ];
 
-// ✅ 텍스트 파싱 유틸
-const parseSectionsByTitle = (
-  text: string,
-  titles: string[],
-): ParsedSections => {
-  const result: ParsedSections = {};
-  titles.forEach((title, index) => {
-    const start = text.indexOf(title);
-    const end =
-      index + 1 < titles.length ? text.indexOf(titles[index + 1]) : text.length;
-    result[title] = text.slice(start + title.length, end).trim();
-  });
-  return result;
-};
-
-const formatBulletList = (text: string): string => {
-  return text.replace(/^\s+-/gm, '-');
-};
-
 const Report = () => {
-  const [animate, setAnimate] = useState(true);
-
   const location = useLocation();
-  const { jobField, scoreResult = [], AIAnalysis = '' } = location.state || {};
+  const {
+    resumeId,
+    jobField,
+    scoreResult = [],
+    AIAnalysis = [],
+  } = location.state || {};
 
   const user = useUserStore((state) => state.user);
   const userName = user?.name;
+
+  useEffect(() => {
+    if (!resumeId || !user) return;
+
+    const timer = requestAnimationFrame(() => {
+      uploadPDFtoServer();
+    });
+
+    return () => cancelAnimationFrame(timer);
+
+    async function uploadPDFtoServer() {
+      const blob = await generatePDFBlob();
+      if (!blob) return;
+
+      try {
+        const formData = new FormData();
+        formData.append('file', blob, 'report.pdf');
+        formData.append('resume_id', resumeId);
+
+        await axiosFormInstance.post('/upload/pdf', formData);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [resumeId, user]);
 
   // ✅ 평균 점수, radar 차트용 데이터 메모이제이션
   const averageScore = useMemo(() => {
@@ -91,17 +93,6 @@ const Report = () => {
   const top3 = useMemo(() => {
     return [...data].sort((a, b) => b.score - a.score).slice(0, 3);
   }, [data]);
-
-  const parsedResultSections = useMemo(
-    () => parseSectionsByTitle(AIAnalysis, resultTitles),
-    [AIAnalysis],
-  );
-
-  // 컴포넌트 마운트 후 애니메이션은 한 번만 실행
-  useEffect(() => {
-    const timer = setTimeout(() => setAnimate(false), 2000); // 2초 후 애니메이션 끔
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <main className={styles.reportContainer}>
@@ -131,57 +122,20 @@ const Report = () => {
             </div>
           </div>
           <div className={styles.chart}>
-            <ResponsiveContainer width="100%" aspect={1}>
-              <RadarChart cx="50%" cy="50%" outerRadius="60%" data={data}>
-                <PolarGrid stroke="#d8d8d8" />
-                <PolarAngleAxis
-                  dataKey="subject"
-                  tick={{ fontSize: 14, fill: '#757575' }}
-                />
-                <PolarRadiusAxis domain={[0, 20]} style={{ fontSize: 10 }} />
-                <Radar
-                  name="내 역량의 평균"
-                  dataKey="averageScore"
-                  stroke="#757575"
-                  strokeDasharray={4}
-                  fillOpacity={0}
-                  dot={{
-                    fill: '#fff',
-                    fillOpacity: 1,
-                    stroke: '#757575',
-                    strokeDasharray: 0,
-                    r: 2,
-                  }}
-                  activeDot={false}
-                  isAnimationActive={animate}
-                />
-                <Radar
-                  name="값"
-                  dataKey="score"
-                  stroke="#5f812e"
-                  fill="#5f812e"
-                  fillOpacity={0.4}
-                  dot={{
-                    r: 2,
-                    fill: '#5f812e',
-                    stroke: '#5f812e',
-                    strokeWidth: 1,
-                  }}
-                  activeDot={false}
-                  isAnimationActive={animate}
-                />
-                <Legend wrapperStyle={{ fontSize: 14 }} />
-              </RadarChart>
-            </ResponsiveContainer>
+            <CustomRadarChart
+              data={data}
+              averageLabel="내 역량의 평균"
+              scoreLabel="값"
+            />
           </div>
         </section>
         <section className={styles.result}>
           <h3>03 분석 결과</h3>
           <div className={styles.resultSection}>
-            {Object.entries(parsedResultSections).map(([title, content]) => (
-              <div key={title}>
-                <h4>{title}</h4>
-                <p className={styles.resultText}>{formatBulletList(content)}</p>
+            {AIAnalysis.map((content: AIAnalysisItem, idx: number) => (
+              <div key={idx}>
+                <h4>{RESULT_TITLES[idx]}</h4>
+                <p className={styles.resultText}>{content}</p>
               </div>
             ))}
           </div>

@@ -56,8 +56,8 @@ const getCanvasSlice = (
   return sliceCanvas;
 };
 
-// === 메인 함수 ===
-const downloadPDF = async () => {
+// === PDF 생성 함수 ===
+const generatePDF = async () => {
   const src = document.getElementById('pdf-section');
   if (!src) return;
 
@@ -96,7 +96,18 @@ const downloadPDF = async () => {
   }
 
   document.body.removeChild(wrapper);
-  pdf.save('download.pdf');
+  return pdf;
 };
 
-export default downloadPDF;
+export const generatePDFBlob = async () => {
+  const pdf = await generatePDF();
+  if (!pdf) return;
+  return pdf.output('blob');
+};
+
+export const downloadPDF = async () => {
+  const pdf = await generatePDF();
+  if (!pdf) return;
+
+  pdf.save(`download.pdf`);
+};
