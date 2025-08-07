@@ -1,0 +1,75 @@
+.loginBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 0 16px;
+  font-size: var(--font-size-16);
+}
+
+.signupContainer {
+  padding: 0 16px;
+  width: 100%;
+  max-width: 512px;
+  margin: 0 auto 100px;
+}
+
+.signupTitle {
+  font-size: var(--font-size-28);
+  font-weight: 700;
+  text-align: center;
+  margin-block: 60px 40px;
+}
+
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+.emailContainer,
+.passwordContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.email,
+.authcode {
+  position: relative;
+
+  button {
+    padding: 10px;
+    font-size: var(--font-size-14);
+    color: var(--color-primary);
+    cursor: pointer;
+
+    &:disabled {
+      color: var(--color-gray-b1);
+      cursor: not-allowed;
+    }
+  }
+}
+
+.requestBtn {
+  position: absolute;
+  top: 44px;
+  right: 16px;
+}
+
+.authcodeActions {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+
+  time {
+    margin-right: 8px;
+    font-size: var(--font-size-14);
+    color: var(--color-gray-2);
+  }
+}
+
+.sending {
+  font-size: var(--font-size-14);
+  color: var(--color-success);
+}

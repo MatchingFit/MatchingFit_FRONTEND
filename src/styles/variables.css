@@ -1,0 +1,38 @@
+:root {
+  /* Primary */
+  --color-primary: #5f812e;
+  --color-secondary: #757575;
+  --color-tertiary: #fafaf8;
+
+  /* Semantic */
+  --color-success: #26ae6d;
+  --color-warn: #f8be2b;
+  --color-error: #e7442e;
+
+  /* Black & White */
+  --color-black: #000;
+  --color-gray-2: #222;
+  --color-gray-46: #464646;
+  --color-gray-76: #767676;
+  --color-gray-b1: #b1b1b1;
+  --color-gray-d5: #d5d5d5;
+  --color-gray-ef: #efefef;
+  --color-white: #fff;
+
+  /* font-size */
+  --font-size-12: 0.75rem;
+  --font-size-13: 0.8125rem;
+  --font-size-14: 0.875rem;
+  --font-size-16: 1rem;
+  --font-size-18: 1.125rem;
+  --font-size-20: 1.25rem;
+  --font-size-24: 1.5rem;
+  --font-size-28: 1.75rem;
+  --font-size-30: 1.875rem;
+  --font-size-32: 2rem;
+  --font-size-36: 2.25rem;
+
+  /* size */
+  --size-header: 60px;
+  --size-max-width: 1060px;
+}

@@ -1,0 +1,27 @@
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 120px);
+  padding: 0 16px;
+}
+
+.text {
+  margin-bottom: 20px;
+  font-size: var(--font-size-18);
+  text-align: center;
+}
+
+.progressBar {
+  width: 200px;
+  height: 8px;
+  background-color: var(--color-tertiary);
+  border-radius: 2px;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-primary);
+  transition: width 0.1s linear;
+}

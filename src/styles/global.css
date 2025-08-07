@@ -1,0 +1,46 @@
+@import './reset.css';
+@import './variables.css';
+
+@font-face {
+  font-family: 'LINESeedKR';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src:
+    url('/public/fonts/LINESeedKR-Rg.woff2') format('woff2'),
+    url('/public/fonts/LINESeedKR-Rg.woff') format('woff'),
+    url('/public/fonts/LINESeedKR-Rg.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'LINESeedKR';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src:
+    url('/public/fonts/LINESeedKR-Bd.woff2') format('woff2'),
+    url('/public/fonts/LINESeedKR-Bd.woff') format('woff'),
+    url('/public/fonts/LINESeedKR-Bd.otf') format('opentype');
+}
+
+body {
+  font-family: 'LINESeedKR', sans-serif;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding-top: 60px;
+}
+
+.a11yHidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+
+.recharts-wrapper * {
+  outline: none;
+}
